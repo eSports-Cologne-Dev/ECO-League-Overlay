@@ -2,10 +2,16 @@ import React from 'react';
 import BaronIcon from './Baron_Nashor_Render.png';
 import './Baron.css';
 
-function BaronTimer(minutes, seconds) {
+function BaronTimer(minutes, seconds, active) {
     var time = minutes*60+seconds;
     var interval = setInterval(function(){
         var el = document.getElementById("baron-cd")
+
+        if(time <= 0){
+            clearInterval(interval);
+            active = false;
+            return;
+        }
 
         var minutes = Math.floor(time/60);
         if (minutes < 10) minutes = "0" + minutes;
@@ -18,12 +24,12 @@ function BaronTimer(minutes, seconds) {
     }, 1000);
 }
 
-function Baron() {
-    
-    BaronTimer(3,0);
-
-    return(
-        <>
+function Baron(props){
+    var active = props.active;
+    active = true;
+    BaronTimer(3,0, active);
+    if(active){
+        return(
             <div className="baron-buff">
                 <div className="baron-buff-notification">
                     <div className="baron-buff-icon">
@@ -35,6 +41,11 @@ function Baron() {
                     </div>
                 </div>
             </div>
-        </>
-    )
+        );
+    }
+    else{
+        return null;
+    }
 }
+
+export default Baron;
